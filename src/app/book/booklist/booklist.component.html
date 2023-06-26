@@ -1,0 +1,63 @@
+<div class="flex justify-content-between">
+    <h1>Books</h1>
+    <button pButton pRipple label="Add Books" (click)="addbooks()" class="p-button-success" style="margin-left: 850px;"></button>
+
+
+</div>
+<div>
+    <span class="p-input-icon-left mb-4 ms-2">
+
+        <i class="pi pi-search"></i>
+
+        <input pInputText type="text" #filter (input)="onSearchdata(tb1, $event)" placeholder="Search Books" class="w-full" />
+
+    </span>
+</div>
+<div class="card">
+    <p-table [value]="books"  #tb1 [tableStyle]="{ 'min-width': '50rem' }" [paginator]="true" [rows]="10" [globalFilterFields]="['id','title','description','pageCount','excerpt','publishDate']">
+        <ng-template pTemplate="header">
+            <tr>
+                
+                <th pSortableColumn="id" style="width:20%">Id <p-sortIcon field="id"></p-sortIcon></th>
+                <th pSortableColumn="title" style="width:20%">Title<p-sortIcon field="title"></p-sortIcon></th>
+                <th pSortableColumn="description" style="width:20%">Description <p-sortIcon field="Description"></p-sortIcon></th>
+                <th pSortableColumn="pageCount" style="width:20%">pageCount<p-sortIcon field="pageCount"></p-sortIcon></th>
+                
+                <th pSortableColumn="excerpt" style="width:20%">Excerpt<p-sortIcon field="excerpt"></p-sortIcon></th>
+                <th pSortableColumn="publishDate" style="width:20%">publishDate<p-sortIcon field="publishDate"></p-sortIcon></th>
+               
+                <th pSortableColumn="actions" style="width:20%">Actions<p-sortIcon field="actions"></p-sortIcon></th>
+                
+                
+                <th pSortableColumn="Action" style="width:20%">Action <p-sortIcon field="Action"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-book>
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.title }}</td>
+               
+                <td>{{ book.description }}</td>
+                <td>{{ book.pageCount }}</td>
+                <td>{{book.excerpt}}</td>
+                <td>{{ book.publishDate }}</td>
+                
+                <td>
+                    <p-button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-3" (click)="editbooks(book.id)">Edit</p-button>
+                </td>
+                <td>
+                    <p-toast></p-toast>
+                    <p-confirmPopup></p-confirmPopup>
+                    
+                        
+                        <p-button icon="pi pi-trash" class="p-button-rounded p-button-success mr-3"(click)="deletebooks(book.id,$event)">Delete</p-button>
+
+                      
+                </td>
+
+                
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
