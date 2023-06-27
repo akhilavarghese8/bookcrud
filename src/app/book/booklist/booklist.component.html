@@ -25,11 +25,7 @@
                 
                 <th pSortableColumn="excerpt" style="width:20%">Excerpt<p-sortIcon field="excerpt"></p-sortIcon></th>
                 <th pSortableColumn="publishDate" style="width:20%">publishDate<p-sortIcon field="publishDate"></p-sortIcon></th>
-               
-                <th pSortableColumn="actions" style="width:20%">Actions<p-sortIcon field="actions"></p-sortIcon></th>
-                
-                
-                <th pSortableColumn="Action" style="width:20%">Action <p-sortIcon field="Action"></p-sortIcon></th>
+                <th pSortableColumn="Actions" style="width:20%">Actions</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-book>
@@ -38,8 +34,15 @@
                 <td>{{ book.title }}</td>
                
                 <td>{{ book.description }}</td>
+                
+
                 <td>{{ book.pageCount }}</td>
-                <td>{{book.excerpt}}</td>
+                
+                <!-- <td>{{book.excerpt}}</td> -->
+                <td [title]="book.excerpt" [style.cursor]="'pointer'">
+                {{ book.excerpt.length > 50 ? book.excerpt.substring(0,50) + '...' : book.excerpt }}
+                </td>
+
                 <td>{{ book.publishDate }}</td>
                 
                 <td>

@@ -5,16 +5,17 @@ import { MessageService } from 'primeng/api';
 import { map } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 
+
 @Component({
   selector: 'app-bookcreate',
   templateUrl: './bookcreate.component.html',
   styleUrls: ['./bookcreate.component.css']
 })
 export class BookcreateComponent implements OnInit {
-  selectedBook: any = null
+  // selectedBook: any = null
   add_mode: boolean = true;
   title_btn = 'Add'
-  bid = "";
+  bid="";
 
   constructor(private formBuilder: FormBuilder, private service: BookService, private messageService: MessageService, private route: ActivatedRoute) {
 
@@ -23,19 +24,16 @@ export class BookcreateComponent implements OnInit {
   ngOnInit(): void {
 
     this.bid = this.route.snapshot.params["id"]
-    // console.log("id", this.bid);
     this.add_mode = !this.bid
 
 
     if (!this.add_mode) {
-      // console.log("inside edit");
-      // console.log("id", this.bid);
+      
       this.title_btn = 'update'
       this.service.getbooks(this.bid).subscribe(
         (response: any) => {
-          // console.log(response);
+          
           this.bookform.patchValue({
-            id: response.id,
             title: response.title,
             description: response.description,
             pageCount: response.pageCount,
@@ -52,12 +50,12 @@ export class BookcreateComponent implements OnInit {
   }
 
   bookform = new FormGroup({
-    id: new FormControl("", Validators.required),
-    title: new FormControl("", Validators.required,),
-    description: new FormControl("", Validators.required,),
-    pageCount: new FormControl("", Validators.required),
-    excerpt: new FormControl("", Validators.required),
-    publishDate: new FormControl(new Date(), Validators.required)
+    // id: new FormControl("", Validators.required,),
+    title: new FormControl(null, [Validators.required,Validators.maxLength(30)]),
+    description: new FormControl(null, [Validators.required,Validators.maxLength(50)]),
+    pageCount: new FormControl(null, [Validators.required,Validators.minLength(10), Validators.maxLength(250)]),
+    excerpt: new FormControl(null, [Validators.maxLength(250)]),
+    publishDate: new FormControl(new Date(),[ Validators.required,])
   })
 
 

@@ -15,7 +15,7 @@ export class BookService {
   }
   createbooks(postdata:any){
    
-    return this.http.post<Book[]>(`https://fakerestapi.azurewebsites.net/api/v1/Books `,postdata)
+    return this.http.post<Book[]>(`https://fakerestapi.azurewebsites.net/api/v1/Books`,postdata)
   }
   // editbook(id:number,postdata:any){
   //   return this.http.put(`https://fakerestapi.azurewebsites.net/api/v1/Books/${id}`,postdata)

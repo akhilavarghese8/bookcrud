@@ -1,44 +1,57 @@
-<h1 style="margin-left: 700px;">Bookcreate</h1>
+<h1 style="margin-left: 700px;">{{ title_btn }} Book</h1>
 
-<p-toast></p-toast> 
+<p-toast></p-toast>
 <div class="container">
-    <form [formGroup]="bookform" class="product-form ">
-       
-        <div class="field">
-            <label class="block"for="title">Title</label>
-            <input type="text" pInputText class="form-control" id="title" formControlName="title" />
-            <div class="form-text text-danger" *ngIf="bookform.get('title')?.errors?.['required']">Field is required</div>
-            
-        </div><br>
-        <div class="field">
-            <label class="block" for="description">Description</label>
-            <textarea rows="5" cols="30" pInputTextarea class="form-control" formControlName="description" id="description" ></textarea>
-            
-            <div class="form-text text-danger" *ngIf="bookform.get('description')?.errors?.['required']">Field is required</div>
-            
-        
-        </div><br>
-        <div class="field">
-            <label class="block">pageCount</label>
-            <p-inputNumber id="pageCount" formControlName="pageCount" ></p-inputNumber>
-        </div><br>
-        <div class="field">
-            <label class="block" for="excerpt">Excerpt</label>
-            <input type="text" pInputText  class="form-control" id="excerpt" formControlName="excerpt" />
-            <div class="form-text text-danger" *ngIf="bookform.get('excerpt')?.errors?.['required']">Field is required</div>
-        </div><br>
-        <div class="field">
-            <label class="block" for="publishDate">publishedDate</label>
-            <p-calendar formControlName="publishDate"  dateFormat="yy-mm-dd'T'HH:MM:ss.l'Z'"></p-calendar>
-            
-        </div><br>
-        <div>
-            <p-button label={{title_btn}} (click)="addingbooks()" [disabled]=bookform.invalid  label="Add" class="pbutton"></p-button>
-        </div><br>
-        <div>
-            
-        </div><br>
-     </form>           
-  
-  
+  <form [formGroup]="bookform" class="product-form ">
+    
+    <div class="field">
+      <label class="block" for="title">Title</label>
+      <input type="text" pInputText class="form-control" id="title" formControlName="title">
+      <div class="form-text text-danger" *ngIf="bookform.get('title')?.errors?.['required']">Field is required</div>
+      <div class="form-text text-danger" *ngIf="bookform.get('title')?.errors?.['maxlength']">
+        Title should not exceed 30 characters
+      </div>
+    </div><br>
+    <div class="field">
+      <label class="block" for="description">Description</label>
+      <textarea rows="5" cols="30" pInputTextarea class="form-control" formControlName="description"
+        id="description"></textarea>
+      <div class="form-text text-danger" *ngIf="bookform.get('description')?.errors?.['required']">Field is required</div>
+      <div class="form-text text-danger" *ngIf="bookform.get('description')?.errors?.['maxlength']">
+        Description should not exceed 50 characters
+      </div>
+    </div><br>
+    <div class="field">
+      <label class="block">pageCount</label>
+      <p-inputNumber id="pageCount" formControlName="pageCount" [min]="10" [max]="250"></p-inputNumber>
+      <div class="form-text text-danger" *ngIf="bookform.get('pageCount')?.errors?.['required']">Field is required</div>
+    </div><br>
+    <!-- <div class="field">
+        <label class="block">pageCount</label>
+        <p-inputNumber id="pageCount" formControlName="pageCount" [min]="10" [max]="250"></p-inputNumber>
+        <div class="form-text text-danger" *ngIf="bookform.get('pageCount')?.errors?.['required']">Field is required</div>
+        <div class="form-text text-danger" *ngIf="bookform.get('pageCount')?.errors?.['minLength']">Minimum pageCount is 10</div>
+        <div class="form-text text-danger" *ngIf="bookform.get('pageCount')?.errors?.['maxLength']">Maximum pageCount is 250</div>
+      </div><br> -->
+      
+      <div class="field">
+      <label class="block" for="excerpt">Excerpt</label>
+      <input type="text" pInputText class="form-control" id="excerpt" formControlName="excerpt" />
+      <div class="form-text text-danger" *ngIf="bookform.get('excerpt')?.errors?.['maxlength']">
+        Excerpt should not exceed 250 characters
+      </div>
+    </div><br>
+    <div class="field">
+      <label class="block" for="publishDate">publishedDate</label>
+      <p-calendar formControlName="publishDate" dateFormat="yy-mm-dd'T'HH:MM:ss.l'Z'"></p-calendar>
+      <div class="form-text text-danger" *ngIf="bookform.get('publishDate')?.errors?.['required']">Field is required</div>
+      <div class="form-text text-danger" *ngIf="bookform.get('publishDate')?.errors?.['futureDate']">Future dates are not allowed</div>
+    </div><br>
+    <div>
+        <p-button label={{title_btn}} (click)="addingbooks()" [disabled]=bookform.invalid class="pbutton"></p-button>
+    </div><br>
+    <div>
+      
+    </div><br>
+  </form>
 </div>

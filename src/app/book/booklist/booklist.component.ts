@@ -1,28 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { BookService } from 'src/app/services/book.service';
 import { Book } from 'src/app/interface/book';
 import { Router,ActivatedRoute } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import {Table} from 'primeng/table'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-booklist',
   templateUrl: './booklist.component.html',
   styleUrls: ['./booklist.component.css']
 })
-export class BooklistComponent {
+export class BooklistComponent implements OnInit,OnDestroy {
 
   books:Book[]=[]
-  
+  booksubscribe=new Subscription
+
   constructor(private service:BookService,private route:Router,private confirmationService:ConfirmationService,private messageService:MessageService){}
   ngOnInit(): void {
-    this.service.getallbooks().subscribe(
+    this.booksubscribe.add(this.service.getallbooks().subscribe(
       response=>{
         this.books=response
       }
-    )
+    ));
   }
+
+  ngOnDestroy(): void {
+    this.booksubscribe.unsubscribe()
+  }
+
   onSearchdata(table:Table,event:any){
     table.filterGlobal((event.target.value as string),'contains')
   }
@@ -58,5 +65,7 @@ export class BooklistComponent {
       }
   });
 }
+
+
   }
 
