@@ -19,6 +19,8 @@ import { CalendarModule } from 'primeng/calendar';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { NotfoundcomponentComponent } from './notfoundcomponent/notfoundcomponent.component';
+import { ImageModule } from 'primeng/image';
 
 // import { BrowserModule } from '@angular/platform-browser';
 
@@ -28,7 +30,8 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
   declarations: [
     BookComponent,
     BooklistComponent,
-    BookcreateComponent
+    BookcreateComponent,
+    NotfoundcomponentComponent
   ],
   imports: [
     CommonModule,
@@ -45,6 +48,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     CalendarModule,
     ToastModule,
     ConfirmPopupModule,
+    ImageModule,
     
 
     

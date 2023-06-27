@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { BookComponent } from './book.component';
 import { BooklistComponent } from './booklist/booklist.component';
 import { BookcreateComponent } from './bookcreate/bookcreate.component';
+import { NotfoundcomponentComponent } from './notfoundcomponent/notfoundcomponent.component';
 
 
 
@@ -43,7 +44,9 @@ const routes: Routes = [
         path:"delete/:id",
         component: BooklistComponent,
       },
-
+      { path: '**',pathMatch:"full",
+      component:NotfoundcomponentComponent
+      } ,
 
 
 

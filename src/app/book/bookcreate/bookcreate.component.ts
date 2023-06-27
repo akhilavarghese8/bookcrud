@@ -1,9 +1,11 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl} from '@angular/forms';
+import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { BookService } from 'src/app/services/book.service';
 import { MessageService } from 'primeng/api';
 import { map } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { trim } from 'lodash';
 
 
 @Component({
@@ -11,11 +13,14 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './bookcreate.component.html',
   styleUrls: ['./bookcreate.component.css']
 })
-export class BookcreateComponent implements OnInit {
+export class BookcreateComponent implements OnInit, OnDestroy {
   // selectedBook: any = null
   add_mode: boolean = true;
   title_btn = 'Add'
-  bid="";
+  bid = "";
+  booksubscribe = new Subscription
+
+  title1: string = ""
 
   constructor(private formBuilder: FormBuilder, private service: BookService, private messageService: MessageService, private route: ActivatedRoute) {
 
@@ -28,11 +33,11 @@ export class BookcreateComponent implements OnInit {
 
 
     if (!this.add_mode) {
-      
+
       this.title_btn = 'update'
-      this.service.getbooks(this.bid).subscribe(
+      this.booksubscribe.add(this.service.getbooks(this.bid).subscribe(
         (response: any) => {
-          
+
           this.bookform.patchValue({
             title: response.title,
             description: response.description,
@@ -40,7 +45,7 @@ export class BookcreateComponent implements OnInit {
             excerpt: response.excerpt,
             publishDate: new Date(response.publishDate)
           })
-        })
+        }))
     } else {
       this.title_btn = "Add"
 
@@ -51,12 +56,17 @@ export class BookcreateComponent implements OnInit {
 
   bookform = new FormGroup({
     // id: new FormControl("", Validators.required,),
-    title: new FormControl(null, [Validators.required,Validators.maxLength(30)]),
-    description: new FormControl(null, [Validators.required,Validators.maxLength(50)]),
-    pageCount: new FormControl(null, [Validators.required,Validators.minLength(10), Validators.maxLength(250)]),
+    title: new FormControl("", [Validators.required, Validators.maxLength(30)]),
+    description: new FormControl(null, [Validators.required, Validators.maxLength(50)]),
+    pageCount: new FormControl(null, [Validators.required, Validators.min(10), Validators.max(250)]),
+
     excerpt: new FormControl(null, [Validators.maxLength(250)]),
-    publishDate: new FormControl(new Date(),[ Validators.required,])
+    publishDate: new FormControl(new Date(), [Validators.required,])
+    // publishDate: new FormControl(new Date(), [Validators.required, this.futureDateValidator])
   })
+
+
+
 
 
 
@@ -84,15 +94,32 @@ export class BookcreateComponent implements OnInit {
 
   addingbooks() {
 
+    if (this.bookform) {
+      const titleControl = this.bookform.controls['title'];
+      const descriptionControl = this.bookform.controls['description'];
+  
+      if (titleControl && descriptionControl) {
+        const titleValue: any = titleControl.value;
+        const descriptionValue: any = descriptionControl.value;
+  
+        titleControl.setValue(titleValue?.trim() || '');
+        descriptionControl.setValue(descriptionValue?.trim() || '');
+  
+        // Proceed with other add functionality
+      }
+    }
+
+
+
     if (this.bid != null) {
-      this.service.editbook(this.bookform.value,this.bid).subscribe(
-        response=>{
+      this.service.editbook(this.bookform.value, this.bid).subscribe(
+        response => {
           this.messageService.add({ severity: 'success', summary: 'edited', detail: 'book edited' })
           console.log(response);
-          
+
         }
       )
-        } else {
+    } else {
 
       this.service.createbooks(this.bookform.value).subscribe(
         response => {
@@ -103,14 +130,11 @@ export class BookcreateComponent implements OnInit {
 
   }
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (this.selectedBook) {
-  //     console.log(this.bookform.value)
-  //     this.bookform.patchValue(this.selectedBook)
-
-  //   }
-  // }
-   
+  ngOnDestroy(): void {
+    this.booksubscribe.unsubscribe()
+  }
 
 
 }
+
+
